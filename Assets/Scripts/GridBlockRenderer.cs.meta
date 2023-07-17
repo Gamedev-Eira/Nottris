@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3683e847cca9c3d4fa8bf8541ef398e9
+guid: 60169a00dd6d3f84e837f6b50c5f36f6
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - GridTile: {fileID: 647067549681406439, guid: 9b810cb816c0cb44e94d542332c4495a, type: 3}
+  - MySprite: {fileID: 21300000, guid: 77bb4b811fd23904ab543b0e0ee2b089, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
