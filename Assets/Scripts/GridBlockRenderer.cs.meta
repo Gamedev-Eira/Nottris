@@ -4,7 +4,7 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - MySprite: {fileID: 21300000, guid: 77bb4b811fd23904ab543b0e0ee2b089, type: 3}
+  - MySprite: {fileID: 21300000, guid: da618caac8f43c844887e59fa22d0d55, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
