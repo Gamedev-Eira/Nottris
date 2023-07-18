@@ -8,8 +8,8 @@ public class Display_Tetris_Board : MonoBehaviour {
 
     GameObject[,] TETRIS_BOARD = new GameObject[16, 10];
 
-    string ColourblindMode = "Regular";
-
+    float y = -3.5f;
+    float x = -2;
 
     void Start() {
 
@@ -27,6 +27,7 @@ public class Display_Tetris_Board : MonoBehaviour {
             } //end for
 
             y = y + (TETRIS_BOARD[row, 0].GetComponent<SpriteRenderer>().bounds.size.y);
+            x = x - ((TETRIS_BOARD[row, 0].GetComponent<SpriteRenderer>().bounds.size.x) * TETRIS_BOARD.GetLength(0));
 
         }//end for
         
@@ -34,10 +35,10 @@ public class Display_Tetris_Board : MonoBehaviour {
     }
 
     void Update() {
-        UpdateBoard();
-    }
+        TempUpdater();
+    } //end update
 
-    void UpdateBoard() {
+    void TempUpdater() {
 
         TETRIS_BOARD[0, 0].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
         TETRIS_BOARD[1, 0].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
