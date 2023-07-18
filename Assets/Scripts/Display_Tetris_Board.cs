@@ -34,14 +34,25 @@ public class Display_Tetris_Board : MonoBehaviour {
     }
 
     void Update() {
-        
+        UpdateBoard();
     }
 
     void UpdateBoard() {
 
-    }
+        TETRIS_BOARD[0, 0].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
+        TETRIS_BOARD[1, 0].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
+        TETRIS_BOARD[2, 0].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
+        TETRIS_BOARD[1, 1].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
 
-    void RedrawBoard() {
+        TETRIS_BOARD[0, 1].GetComponent<GridBlockRenderer>().UpdateStatus("Red");
+        TETRIS_BOARD[0, 2].GetComponent<GridBlockRenderer>().UpdateStatus("Red");
+        TETRIS_BOARD[0, 3].GetComponent<GridBlockRenderer>().UpdateStatus("Red");
+        TETRIS_BOARD[1, 2].GetComponent<GridBlockRenderer>().UpdateStatus("Red");
+
+        TETRIS_BOARD[2, 1].GetComponent<GridBlockRenderer>().UpdateStatus("Orange");
+        TETRIS_BOARD[2, 2].GetComponent<GridBlockRenderer>().UpdateStatus("Orange");
+        TETRIS_BOARD[2, 3].GetComponent<GridBlockRenderer>().UpdateStatus("Orange");
+        TETRIS_BOARD[1, 3].GetComponent<GridBlockRenderer>().UpdateStatus("Orange");
 
     }
 
