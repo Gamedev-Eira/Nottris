@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class tTetromino : MonoBehaviour
-{
+public class Tetromino_T : MonoBehaviour {
 
     public GameObject GridTile;
 
@@ -12,12 +11,45 @@ public class tTetromino : MonoBehaviour
 
     private int RotationValue = 1;
 
-    GameObject[,] Tetromino = new GameObject[3, 3];
+    private const int Dimensions = 3;
+    private const int ShapeQuantity = 4;
 
+    private string Colour = "Green";
+
+    GameObject[,] Tetromino;
+
+    bool[,,] Shape = new bool[ShapeQuantity, Dimensions, Dimensions]
+    {
+        {
+            {false, true , false},
+            {true , true , true },
+            {false, false, false}
+        },
+
+        {
+            {false, true , false},
+            {false, true , true },
+            {false, true , false}
+        },
+
+        {
+            {false, false, false},
+            {true , true , true },
+            {false, true , false}
+        },
+
+        {
+            {false, true , false},
+            {true , true , false},
+            {false, true , false}
+        }
+    };
+
+
+
+    ///////////////////////////////////////////////////////
 
     void Start() {
-
-        //float temp = PositionY;
 
         for (int row = 0; row < Tetromino.GetLength(0); row++) {
             for (int collum = 0; collum < Tetromino.GetLength(1); collum++) {
@@ -32,47 +64,25 @@ public class tTetromino : MonoBehaviour
 
         }//end for
 
-        //PositionY = temp;
+    }//end initalise
 
-        UpdateRotation();
-
-    }//end start
-
-    void Update()
-    {
-
-        if (Input.GetMouseButtonDown(0)) { DoRotation(false); }
-        else if (Input.GetMouseButtonDown(1)) { DoRotation(true); }
-
-    } //end update
+    ///////////////////////////////////////////////////////
 
     void UpdateRotation() {
-        switch (RotationValue) {
-            case 1:
-                Tetromino[1, 0].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
-                Tetromino[1, 1].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
-                Tetromino[1, 2].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
-                Tetromino[2, 1].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
-                break;
-            case 2:
-                Tetromino[0, 1].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
-                Tetromino[1, 1].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
-                Tetromino[2, 1].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
-                Tetromino[1, 2].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
-                break;
-            case 3:
-                Tetromino[1, 0].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
-                Tetromino[1, 1].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
-                Tetromino[1, 2].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
-                Tetromino[0, 1].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
-                break;
-            case 4:
-                Tetromino[0, 1].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
-                Tetromino[1, 1].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
-                Tetromino[2, 1].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
-                Tetromino[1, 0].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
-                break;
-        }//end switch
+
+        for (int row = 0; row < Dimensions; row++) {
+
+            for (int column = 0; column < Dimensions; column++) {
+
+                if(Shape[(RotationValue - 1), row, column] == true) {
+                    Tetromino[row, column].GetComponent<GridBlockRenderer>().UpdateStatus(Colour);
+                }
+                else if (Shape[(RotationValue - 1), row, column] == false) {
+                    Tetromino[row, column].GetComponent<GridBlockRenderer>().UpdateStatus("Empty");
+                } //end if else
+
+            }//end for
+        }//end for
     }//end void
 
     void ResetToEmpty() {
@@ -119,6 +129,17 @@ public class tTetromino : MonoBehaviour
         ResetToEmpty();
         RotationValue = Rotator(Clockwise, RotationValue);
         UpdateRotation();
+
     }//end void
 
+    ///////////////////////////////////////////////////////
+
+    void Update() {
+
+        if (Input.GetMouseButtonDown(0)) { DoRotation(false); }
+        else if (Input.GetMouseButtonDown(1)) { DoRotation(true); }
+
+    } //end update
+
 }//end class
+
