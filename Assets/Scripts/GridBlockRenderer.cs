@@ -70,4 +70,8 @@ public class GridBlockRenderer : MonoBehaviour {
         TileStatus = NewStatus;
     }
 
+    public string ReportStatus() {
+        return TileStatus;
+    }
+
 }
