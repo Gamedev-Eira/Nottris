@@ -8,8 +8,8 @@ public class Display_Tetris_Board : MonoBehaviour {
 
     GameObject[,] TETRIS_BOARD = new GameObject[16, 10];
 
-    string ColourblindMode = "Regular";
-
+    float y = -3.5f;
+    float x = -2;
 
     void Start() {
 
@@ -27,6 +27,7 @@ public class Display_Tetris_Board : MonoBehaviour {
             } //end for
 
             y = y + (TETRIS_BOARD[row, 0].GetComponent<SpriteRenderer>().bounds.size.y);
+            x = x - ((TETRIS_BOARD[row, 0].GetComponent<SpriteRenderer>().bounds.size.x) * TETRIS_BOARD.GetLength(0));
 
         }//end for
         
@@ -34,14 +35,25 @@ public class Display_Tetris_Board : MonoBehaviour {
     }
 
     void Update() {
-        
-    }
+        TempUpdater();
+    } //end update
 
-    void UpdateBoard() {
+    void TempUpdater() {
 
-    }
+        TETRIS_BOARD[0, 0].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
+        TETRIS_BOARD[1, 0].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
+        TETRIS_BOARD[2, 0].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
+        TETRIS_BOARD[1, 1].GetComponent<GridBlockRenderer>().UpdateStatus("Green");
 
-    void RedrawBoard() {
+        TETRIS_BOARD[0, 1].GetComponent<GridBlockRenderer>().UpdateStatus("Red");
+        TETRIS_BOARD[0, 2].GetComponent<GridBlockRenderer>().UpdateStatus("Red");
+        TETRIS_BOARD[0, 3].GetComponent<GridBlockRenderer>().UpdateStatus("Red");
+        TETRIS_BOARD[1, 2].GetComponent<GridBlockRenderer>().UpdateStatus("Red");
+
+        TETRIS_BOARD[2, 1].GetComponent<GridBlockRenderer>().UpdateStatus("Orange");
+        TETRIS_BOARD[2, 2].GetComponent<GridBlockRenderer>().UpdateStatus("Orange");
+        TETRIS_BOARD[2, 3].GetComponent<GridBlockRenderer>().UpdateStatus("Orange");
+        TETRIS_BOARD[1, 3].GetComponent<GridBlockRenderer>().UpdateStatus("Orange");
 
     }
 

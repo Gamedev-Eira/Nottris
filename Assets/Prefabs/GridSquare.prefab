@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 647067549681406439}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.27, y: 1.96, z: 0}
+  m_LocalPosition: {x: 2, y: 1.96, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -97,4 +97,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60169a00dd6d3f84e837f6b50c5f36f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MySprite: {fileID: 21300000, guid: 77bb4b811fd23904ab543b0e0ee2b089, type: 3}
+  RedSprite: {fileID: 21300000, guid: 8f3cfcee5ad6a354f84e20ff3de681c3, type: 3}
+  OrangeSprite: {fileID: 21300000, guid: 18a18b910cbe6b5449f5deb79ae4613e, type: 3}
+  YellowSprite: {fileID: 21300000, guid: dc008462bda520d4d93c5c4acadbd3be, type: 3}
+  GreenSprite: {fileID: 21300000, guid: da618caac8f43c844887e59fa22d0d55, type: 3}
+  LblueSprite: {fileID: 21300000, guid: f65f10975cb7e3c4baa71a775c9e8bcc, type: 3}
+  DblueSprite: {fileID: 21300000, guid: 6f32c6715f9ec144c8d63f5ce209198b, type: 3}
+  PurpleSprite: {fileID: 21300000, guid: 78e5f501770cecc47bd683fb0fa2afb0, type: 3}
+  GraySprite: {fileID: 21300000, guid: 85c614ee09cd5e14785445a7c4f96524, type: 3}
+  EmptySprite: {fileID: 21300000, guid: 77bb4b811fd23904ab543b0e0ee2b089, type: 3}
