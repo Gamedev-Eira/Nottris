@@ -4,49 +4,69 @@ using UnityEngine;
 
 public class Tetromino_Base : MonoBehaviour {
 
-    public GameObject GridTile;
+    public GameObject GridTile;     //Gets a reference to the GameObject found in GridBlockRenderer
 
-    private float PositionX = 0;
+    private float PositionX = 0;    //The X and Y positions ther GridTiles are spawned from 
     private float PositionY = 0;
 
-    private int RotationValue = 4;
+    private int RotationValue = 1;  //The current rotation of the Tetromino
 
-    private const int Dimensions = 4;
-    private const int ShapeQuantity = 4;
+    private const int Dimensions = 4;   //The dimensions of the Tetromino grid
+    private const int ShapeQuantity = 4;//The amoung of rotations a Tetromino can do
 
-    private string Colour = "Empty";
+    private string Colour = "Empty";    //Colour tracks the colour of the tetromino currently being rendered
 
-    private GameObject[,] Tetromino = new GameObject[4, 4];
+    private GameObject[,] Tetromino = new GameObject[4, 4]; //Array of GameObject (GridTile) pointers
 
-    bool[,,] Tet_Shape;
+    bool[,,] Tet_Shape;     //A 3D array (4x4) that stores the potential shapes of the current tetromino
 
     ///////////////////////////////////////////////////////
 
-    void Awake() {
+    void Awake() {  //DO NOT MOVE THIS FROM AWAKE. EVERYTHING WILL BREAK
+
+        //For loop goes through 2D array and Instansiates a GridTile in each entry in the array
+
         for (int row = 0; row < Dimensions; row++) {
             for (int collum = 0; collum < Dimensions; collum++) {
 
                 Tetromino[row, collum] = Instantiate(GridTile, new Vector3(PositionX, PositionY, 0), Quaternion.identity);
+
+                //Gets the size of the created GridTile and increments PositionX by it's value
+                //This places the next GridTile next to the previous one
                 PositionX = PositionX + (Tetromino[row, collum].GetComponent<SpriteRenderer>().bounds.size.x);
 
             } //end for
 
+            //Same deal for Y as with X
             PositionY = PositionY + (Tetromino[0, 0].GetComponent<SpriteRenderer>().bounds.size.y);
+
+            //X is now reset to it's previous starting value
             PositionX = PositionX - ((Tetromino[0, 0].GetComponent<SpriteRenderer>().bounds.size.x) * Tetromino.GetLength(0));
 
         }//end for
 
     }//end start
 
+    void Start()
+    {
+        UpdateRotation();
+    }
+
     ///////////////////////////////////////////////////////
 
     public void init(string colour, bool[,,] shape) {
+        //init is called by TetrominoConstructor and passes along a colour and 3D array
+        //The tetromino then makes it's values the ones it recieved
         Colour = colour;
         Tet_Shape = shape;
 
     }//end init
 
     void UpdateRotation() {
+
+        //for loops go through Tetromino and compare it to the 2D array of bools
+        //if the corrosponding bool is true, it makes that tile the aproproate colour it recieved from init
+        //if it's false, it's set to empty
 
         for (int row = 0; row < Dimensions; row++) {
 
@@ -66,6 +86,8 @@ public class Tetromino_Base : MonoBehaviour {
     void ResetToEmpty() {
 
         float temp = PositionY;
+
+        //for loop sets all the GridTiles in Tetromino to empty
 
         for (int row = 0; row < Tetromino.GetLength(0); row++) {
             for (int collum = 0; collum < Tetromino.GetLength(1); collum++) {
@@ -105,6 +127,7 @@ public class Tetromino_Base : MonoBehaviour {
 
     void DoRotation(bool Clockwise) {
 
+        //Do rotation updates RotationValue then calls UpdateRotation
         RotationValue = Rotator(Clockwise, RotationValue);
         UpdateRotation();
 
@@ -113,12 +136,10 @@ public class Tetromino_Base : MonoBehaviour {
     ///////////////////////////////////////////////////////
 
     void Update() {
-        Debug.Log(RotationValue - 1);
-        UpdateRotation();
-
+        
+        //If checks for a left or right mouse click and rotates accordingly
         if (Input.GetMouseButtonDown(0)) { DoRotation(true); }
         else if (Input.GetMouseButtonDown(1)) { DoRotation(false); }
-        
 
     } //end update
 
