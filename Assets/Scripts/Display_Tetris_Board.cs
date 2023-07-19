@@ -16,7 +16,13 @@ public class Display_Tetris_Board : MonoBehaviour {
     void Awake() {
 
         //For loops go through board and initiate all the game object pointers. Same as Tetromino_Base
+
+        float y = -3.5f;
+
         for (int row = 0; row < TETRIS_BOARD.GetLength(0); row++) {
+
+            float x = -2;
+
             for (int collum = 0; collum < TETRIS_BOARD.GetLength(1); collum++) {
 
                 TETRIS_BOARD[row, collum] = Instantiate(GridTile, new Vector3(x, y, 0), Quaternion.identity);

@@ -47,11 +47,6 @@ public class Tetromino_Base : MonoBehaviour {
 
     }//end start
 
-    void Start()
-    {
-        UpdateRotation();
-    }
-
     ///////////////////////////////////////////////////////
 
     public void init(string colour, bool[,,] shape) {
@@ -59,6 +54,7 @@ public class Tetromino_Base : MonoBehaviour {
         //The tetromino then makes it's values the ones it recieved
         Colour = colour;
         Tet_Shape = shape;
+        UpdateRotation();
 
     }//end init
 
@@ -73,8 +69,7 @@ public class Tetromino_Base : MonoBehaviour {
             for (int column = 0; column < Dimensions; column++) {
                 if(Tet_Shape[(RotationValue - 1), column, row] == true) {
                     Tetromino[column, row].GetComponent<GridBlockRenderer>().UpdateStatus(Colour);
-                }
-                else if (Tet_Shape[(RotationValue - 1), column, row] == false) {
+                } else if (Tet_Shape[(RotationValue - 1), column, row] == false) {
                     Tetromino[column, row].GetComponent<GridBlockRenderer>().UpdateStatus("Empty");
                 } //end if else
 
