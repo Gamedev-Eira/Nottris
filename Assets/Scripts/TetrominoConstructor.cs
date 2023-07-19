@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class TetrominoConstructor : MonoBehaviour {
 
-    private const int Shape_Size = 4;
-    private const int ShapeQuantity = 4;
+    private const int Shape_Size = 4;   //Shape size stores the size of the tetromino grid
+    private const int ShapeQuantity = 4;    //Shape quantity stores how many rotations a tetromino can do
 
-    private char CurrentShape = 'I' ;
+    private char CurrentShape = 'I' ;   //CurrentShape stores the current tetromino that needs to be rendered
 
     //////////////////////////////////////////////////////////////////////
+
+    //These arrays are 3D arrays that contain the 4 rotations of each tetromino.
+    //They are passed to Tetromino_Base to allow it to handle it's own drawing.
+    //The 3D arrays contain 4 4x4 grids
 
     bool[,,] I_Shape = new bool[ShapeQuantity, Shape_Size, Shape_Size]
     {
@@ -230,6 +234,8 @@ public class TetrominoConstructor : MonoBehaviour {
 
     //////////////////////////////////////////////////////////////////////
 
+    //MakeNewTet passes along the colour and 3D shape array to Tetromino_Base, according to which shape currently needs to be drawn
+
     void MakeNewTet() {
         switch (CurrentShape) {
             case 'I':
@@ -257,11 +263,8 @@ public class TetrominoConstructor : MonoBehaviour {
 
     }
 
+    //Calls MakeNewTet on starting (for the time being)
     void Start() {
         MakeNewTet();
-    }
-
-    void Update() {
-        
     }
 }
