@@ -40,38 +40,46 @@ public class GridBlockRenderer : MonoBehaviour {
         //Gets it's new status and makes TileStatus equal to it
         TileStatus = NewStatus;
 
-        //then uses this switch to update it's appearence
-        switch (TileStatus) {
-            case "Empty":
-                RenderTile(EmptySprite); //RenderTile is called, and the new sprite for the GridTile is passed to it
-                break;
-            case "Red":
-                RenderTile(RedSprite);
-                break;
-            case "Orange":
-                RenderTile(OrangeSprite);
-                break;
-            case "Yellow":
-                RenderTile(YellowSprite);
-                break;
-            case "Green":
-                RenderTile(GreenSprite);
-                break;
-            case "Light Blue":
-                RenderTile(LblueSprite);
-                break;
-            case "Dark Blue":
-                RenderTile(DblueSprite);
-                break;
-            case "Purple":
-                RenderTile(PurpleSprite);
-                break;
-            case "Gray":
-                RenderTile(GraySprite);
-                break;
-            default:
-                RenderTile(EmptySprite);
-                break;
+        if(TileStatus == "True Empty")
+        {
+            Sprite_Renderer.enabled = false;
+        }
+        else {
+            Sprite_Renderer.enabled = true;
+
+            //then uses this switch to update it's appearence
+            switch (TileStatus) {
+                case "Empty":
+                    RenderTile(EmptySprite); //RenderTile is called, and the new sprite for the GridTile is passed to it
+                    break;
+                case "Red":
+                    RenderTile(RedSprite);
+                    break;
+                case "Orange":
+                    RenderTile(OrangeSprite);
+                    break;
+                case "Yellow":
+                    RenderTile(YellowSprite);
+                    break;
+                case "Green":
+                    RenderTile(GreenSprite);
+                    break;
+                case "Light Blue":
+                    RenderTile(LblueSprite);
+                    break;
+                case "Dark Blue":
+                    RenderTile(DblueSprite);
+                    break;
+                case "Purple":
+                    RenderTile(PurpleSprite);
+                    break;
+                case "Gray":
+                    RenderTile(GraySprite);
+                    break;
+                default:
+                    RenderTile(EmptySprite);
+                    break;
+            }
         }
     }
 

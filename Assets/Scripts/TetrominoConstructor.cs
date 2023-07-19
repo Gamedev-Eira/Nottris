@@ -236,30 +236,56 @@ public class TetrominoConstructor : MonoBehaviour {
 
     //MakeNewTet passes along the colour and 3D shape array to Tetromino_Base, according to which shape currently needs to be drawn
 
-    void MakeNewTet() {
-        switch (CurrentShape) {
+    void MakeNewTet()
+    {
+
+        //Vector3 StartingPosition = GetComponent<Display_Tetris_Board>().ReturnStartingPosition();
+
+        string TheColour;
+        bool[,,] TheShape;
+        Vector3 Position;
+
+        Position = GameObject.Find("Tetris_Board_Empty").GetComponent<Display_Tetris_Board>().ReturnStartingPosition();
+
+        Debug.Log(Position);
+
+        switch (CurrentShape)
+        {
             case 'I':
-                GetComponent<Tetromino_Base>().init("Yellow", I_Shape);
+                TheColour = "Yellow";
+                TheShape = I_Shape;
                 break;
             case 'L':
-                GetComponent<Tetromino_Base>().init("Light Blue", L_Shape);
+                TheColour = "Light Blue";
+                TheShape = L_Shape;
                 break;
             case 'J':
-                GetComponent<Tetromino_Base>().init("Dark Blue", J_Shape);
+                TheColour = "Dark Blue";
+                TheShape = J_Shape;
                 break;
             case 'O':
-                GetComponent<Tetromino_Base>().init("Purple", O_Shape);
+                TheColour = "Purple";
+                TheShape = O_Shape;
                 break;
             case 'S':
-                GetComponent<Tetromino_Base>().init("Orange", S_Shape);
+                TheColour = "Orange";
+                TheShape = S_Shape;
                 break;
             case 'T':
-                GetComponent<Tetromino_Base>().init("Green", T_Shape);
+                TheColour = "Green";
+                TheShape = T_Shape;
                 break;
             case 'Z':
-                GetComponent<Tetromino_Base>().init("Red", Z_Shape);
+                TheColour = "Red";
+                TheShape = Z_Shape;
+                break;
+            default:
+                TheColour = "Green";
+                TheShape = T_Shape;
                 break;
         }
+
+        GetComponent<Tetromino_Base>().init(TheColour, TheShape, Position);
 
     }
 

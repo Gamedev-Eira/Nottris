@@ -13,7 +13,8 @@ MonoImporter:
   - PurpleSprite: {fileID: 21300000, guid: 78e5f501770cecc47bd683fb0fa2afb0, type: 3}
   - GraySprite: {fileID: 21300000, guid: 85c614ee09cd5e14785445a7c4f96524, type: 3}
   - EmptySprite: {fileID: 21300000, guid: 77bb4b811fd23904ab543b0e0ee2b089, type: 3}
-  executionOrder: 0
+  - TrueEmptySprite: {fileID: 21300000, guid: 1a165233a75ce2249ae0301a0a2d0400, type: 3}
+  executionOrder: 100
   icon: {instanceID: 0}
   userData: 
   assetBundleName: 

@@ -7,14 +7,14 @@ public class Tetromino_Base : MonoBehaviour {
     public GameObject GridTile;     //Gets a reference to the GameObject found in GridBlockRenderer
 
     private float PositionX = 0;    //The X and Y positions ther GridTiles are spawned from 
-    private float PositionY = 0;
+    private float PositionY = +3;
 
     private int RotationValue = 1;  //The current rotation of the Tetromino
 
     private const int Dimensions = 4;   //The dimensions of the Tetromino grid
     private const int ShapeQuantity = 4;//The amoung of rotations a Tetromino can do
 
-    private string Colour = "Empty";    //Colour tracks the colour of the tetromino currently being rendered
+    private string Colour = "True Empty";    //Colour tracks the colour of the tetromino currently being rendered
 
     private GameObject[,] Tetromino = new GameObject[4, 4]; //Array of GameObject (GridTile) pointers
 
@@ -45,15 +45,23 @@ public class Tetromino_Base : MonoBehaviour {
 
         }//end for
 
-    }//end start
+        InvokeRepeating("UpdatePositionSoftdrop", 0.0f, 1.0f);
+
+    }//end Awake
 
     ///////////////////////////////////////////////////////
 
-    public void init(string colour, bool[,,] shape) {
+    public void init(string colour, bool[,,] shape, Vector3 start) {
         //init is called by TetrominoConstructor and passes along a colour and 3D array
         //The tetromino then makes it's values the ones it recieved
         Colour = colour;
         Tet_Shape = shape;
+
+        PositionX = start[0];
+        PositionY = start[1];
+
+        Debug.Log(PositionX + " , " + PositionY);
+
         UpdateRotation();
 
     }//end init
@@ -65,12 +73,11 @@ public class Tetromino_Base : MonoBehaviour {
         //if it's false, it's set to empty
 
         for (int row = 0; row < Dimensions; row++) {
-
             for (int column = 0; column < Dimensions; column++) {
                 if(Tet_Shape[(RotationValue - 1), column, row] == true) {
                     Tetromino[column, row].GetComponent<GridBlockRenderer>().UpdateStatus(Colour);
                 } else if (Tet_Shape[(RotationValue - 1), column, row] == false) {
-                    Tetromino[column, row].GetComponent<GridBlockRenderer>().UpdateStatus("Empty");
+                    Tetromino[column, row].GetComponent<GridBlockRenderer>().UpdateStatus("True Empty");
                 } //end if else
 
             }//end for
@@ -87,7 +94,7 @@ public class Tetromino_Base : MonoBehaviour {
         for (int row = 0; row < Tetromino.GetLength(0); row++) {
             for (int collum = 0; collum < Tetromino.GetLength(1); collum++) {
 
-                Tetromino[row, collum].GetComponent<GridBlockRenderer>().UpdateStatus("Empty");
+                Tetromino[row, collum].GetComponent<GridBlockRenderer>().UpdateStatus("True Empty");
                 PositionX = PositionX + (Tetromino[row, collum].GetComponent<SpriteRenderer>().bounds.size.x);
 
             } //end for
@@ -128,6 +135,34 @@ public class Tetromino_Base : MonoBehaviour {
 
     }//end void
 
+    void UpdatePositionSideways(bool MovingLeft) {
+
+        float NewPosition = Tetromino[0, 0].GetComponent<SpriteRenderer>().bounds.size.x;
+
+        for (int row = 0; row < Dimensions; row++) {
+            for (int column = 0; column < Dimensions; column++) {
+
+                if (MovingLeft) { Tetromino[row, column].transform.position -= new Vector3(NewPosition, 0, 0); }
+                else if (!MovingLeft) { Tetromino[row, column].transform.position += new Vector3(NewPosition, 0, 0); }
+
+            }//end for
+        }//end for
+
+    }
+
+    void UpdatePositionSoftdrop() {
+
+        float NewPosition = Tetromino[0, 0].GetComponent<SpriteRenderer>().bounds.size.x;
+
+        for (int row = 0; row < Dimensions; row++) {
+            for (int column = 0; column < Dimensions; column++) {
+
+                Tetromino[row, column].transform.position -= new Vector3(0, NewPosition, 0);
+
+            }//end for
+        }//end for
+    }
+
     ///////////////////////////////////////////////////////
 
     void Update() {
@@ -136,7 +171,10 @@ public class Tetromino_Base : MonoBehaviour {
         if (Input.GetMouseButtonDown(0)) { DoRotation(true); }
         else if (Input.GetMouseButtonDown(1)) { DoRotation(false); }
 
+        if (Input.GetKeyDown("a") ) { UpdatePositionSideways(true); }
+        else if (Input.GetKeyDown("d") ) { UpdatePositionSideways(false); }
+
     } //end update
 
-}//end class
+    }//end class
 
