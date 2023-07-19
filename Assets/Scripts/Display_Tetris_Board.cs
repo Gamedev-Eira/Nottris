@@ -13,7 +13,7 @@ public class Display_Tetris_Board : MonoBehaviour {
     float y = -3.5f;
     float x = -2;
 
-    void Start() {
+    void Awake() {
 
         //For loops go through board and initiate all the game object pointers. Same as Tetromino_Base
 
@@ -37,6 +37,6 @@ public class Display_Tetris_Board : MonoBehaviour {
     }
 
     public Vector3 ReturnStartingPosition() {
-        return ( (TETRIS_BOARD[0, 4].transform.position)  );
+        return ( TETRIS_BOARD[TETRIS_BOARD.GetLength(0)-2 , 4].transform.position );
     }
 }

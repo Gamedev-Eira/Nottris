@@ -243,11 +243,6 @@ public class TetrominoConstructor : MonoBehaviour {
 
         string TheColour;
         bool[,,] TheShape;
-        Vector3 Position;
-
-        Position = GameObject.Find("Tetris_Board_Empty").GetComponent<Display_Tetris_Board>().ReturnStartingPosition();
-
-        Debug.Log(Position);
 
         switch (CurrentShape)
         {
@@ -285,7 +280,7 @@ public class TetrominoConstructor : MonoBehaviour {
                 break;
         }
 
-        GetComponent<Tetromino_Base>().init(TheColour, TheShape, Position);
+        GetComponent<Tetromino_Base>().init(TheColour, TheShape);
 
     }
 

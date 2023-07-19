@@ -7,7 +7,7 @@ public class Tetromino_Base : MonoBehaviour {
     public GameObject GridTile;     //Gets a reference to the GameObject found in GridBlockRenderer
 
     private float PositionX = 0;    //The X and Y positions ther GridTiles are spawned from 
-    private float PositionY = +3;
+    private float PositionY = 0;
 
     private int RotationValue = 1;  //The current rotation of the Tetromino
 
@@ -25,6 +25,10 @@ public class Tetromino_Base : MonoBehaviour {
     void Awake() {  //DO NOT MOVE THIS FROM AWAKE. EVERYTHING WILL BREAK
 
         //For loop goes through 2D array and Instansiates a GridTile in each entry in the array
+
+        Vector3 Position = GameObject.Find("Tetris_Board_Empty").GetComponent<Display_Tetris_Board>().ReturnStartingPosition();
+        PositionX = Position[0];
+        PositionY = Position[1];
 
         for (int row = 0; row < Dimensions; row++) {
             for (int collum = 0; collum < Dimensions; collum++) {
@@ -51,16 +55,11 @@ public class Tetromino_Base : MonoBehaviour {
 
     ///////////////////////////////////////////////////////
 
-    public void init(string colour, bool[,,] shape, Vector3 start) {
+    public void init(string colour, bool[,,] shape) {
         //init is called by TetrominoConstructor and passes along a colour and 3D array
         //The tetromino then makes it's values the ones it recieved
         Colour = colour;
         Tet_Shape = shape;
-
-        PositionX = start[0];
-        PositionY = start[1];
-
-        Debug.Log(PositionX + " , " + PositionY);
 
         UpdateRotation();
 
