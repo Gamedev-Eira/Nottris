@@ -2,87 +2,65 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tetromino_T : MonoBehaviour {
+public class Tetromino_Base : MonoBehaviour {
 
     public GameObject GridTile;
 
     private float PositionX = 0;
     private float PositionY = 0;
 
-    private int RotationValue = 1;
+    private int RotationValue = 4;
 
-    private const int Dimensions = 3;
+    private const int Dimensions = 4;
     private const int ShapeQuantity = 4;
 
-    private string Colour = "Green";
+    private string Colour = "Empty";
 
-    GameObject[,] Tetromino;
+    private GameObject[,] Tetromino = new GameObject[4, 4];
 
-    bool[,,] Shape = new bool[ShapeQuantity, Dimensions, Dimensions]
-    {
-        {
-            {false, true , false},
-            {true , true , true },
-            {false, false, false}
-        },
-
-        {
-            {false, true , false},
-            {false, true , true },
-            {false, true , false}
-        },
-
-        {
-            {false, false, false},
-            {true , true , true },
-            {false, true , false}
-        },
-
-        {
-            {false, true , false},
-            {true , true , false},
-            {false, true , false}
-        }
-    };
-
-
+    bool[,,] Tet_Shape;
 
     ///////////////////////////////////////////////////////
 
-    void Start() {
-
-        for (int row = 0; row < Tetromino.GetLength(0); row++) {
-            for (int collum = 0; collum < Tetromino.GetLength(1); collum++) {
+    void Awake() {
+        for (int row = 0; row < Dimensions; row++) {
+            for (int collum = 0; collum < Dimensions; collum++) {
 
                 Tetromino[row, collum] = Instantiate(GridTile, new Vector3(PositionX, PositionY, 0), Quaternion.identity);
                 PositionX = PositionX + (Tetromino[row, collum].GetComponent<SpriteRenderer>().bounds.size.x);
 
             } //end for
 
-            PositionY = PositionY + (Tetromino[row, 0].GetComponent<SpriteRenderer>().bounds.size.y);
-            PositionX = PositionX - ((Tetromino[row, 0].GetComponent<SpriteRenderer>().bounds.size.x) * Tetromino.GetLength(0));
+            PositionY = PositionY + (Tetromino[0, 0].GetComponent<SpriteRenderer>().bounds.size.y);
+            PositionX = PositionX - ((Tetromino[0, 0].GetComponent<SpriteRenderer>().bounds.size.x) * Tetromino.GetLength(0));
 
         }//end for
 
-    }//end initalise
+    }//end start
 
     ///////////////////////////////////////////////////////
+
+    public void init(string colour, bool[,,] shape) {
+        Colour = colour;
+        Tet_Shape = shape;
+
+    }//end init
 
     void UpdateRotation() {
 
         for (int row = 0; row < Dimensions; row++) {
 
             for (int column = 0; column < Dimensions; column++) {
-
-                if(Shape[(RotationValue - 1), row, column] == true) {
-                    Tetromino[row, column].GetComponent<GridBlockRenderer>().UpdateStatus(Colour);
+                if(Tet_Shape[(RotationValue - 1), column, row] == true) {
+                    Tetromino[column, row].GetComponent<GridBlockRenderer>().UpdateStatus(Colour);
                 }
-                else if (Shape[(RotationValue - 1), row, column] == false) {
-                    Tetromino[row, column].GetComponent<GridBlockRenderer>().UpdateStatus("Empty");
+                else if (Tet_Shape[(RotationValue - 1), column, row] == false) {
+                    Tetromino[column, row].GetComponent<GridBlockRenderer>().UpdateStatus("Empty");
                 } //end if else
 
             }//end for
         }//end for
+
     }//end void
 
     void ResetToEmpty() {
@@ -126,7 +104,7 @@ public class Tetromino_T : MonoBehaviour {
     }//end rotator
 
     void DoRotation(bool Clockwise) {
-        ResetToEmpty();
+
         RotationValue = Rotator(Clockwise, RotationValue);
         UpdateRotation();
 
@@ -135,9 +113,12 @@ public class Tetromino_T : MonoBehaviour {
     ///////////////////////////////////////////////////////
 
     void Update() {
+        Debug.Log(RotationValue - 1);
+        UpdateRotation();
 
-        if (Input.GetMouseButtonDown(0)) { DoRotation(false); }
-        else if (Input.GetMouseButtonDown(1)) { DoRotation(true); }
+        if (Input.GetMouseButtonDown(0)) { DoRotation(true); }
+        else if (Input.GetMouseButtonDown(1)) { DoRotation(false); }
+        
 
     } //end update
 
