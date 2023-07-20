@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 497177816}
   - component: {fileID: 497177815}
   m_Layer: 0
-  m_Name: A
+  m_Name: Tetris_Board_Empty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -153,6 +153,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GridTile: {fileID: 647067549681406439, guid: 9b810cb816c0cb44e94d542332c4495a, type: 3}
+  TopLeft: {fileID: 21300000, guid: 3cfc88dd1917f044385e41550da068a7, type: 3}
+  TopRight: {fileID: 21300000, guid: 274e437e493bc2243a2dc31ee135bcbc, type: 3}
+  BottomLeft: {fileID: 21300000, guid: 1aa03fce398954f449c8638993879a63, type: 3}
+  BottomRight: {fileID: 21300000, guid: e7b3f433e0a99c2408294fe3faa8dbbd, type: 3}
+  Bottom: {fileID: 21300000, guid: 863eca587a4e60d4fa7c9f33796d24ca, type: 3}
+  Left: {fileID: 21300000, guid: 47923fdfbab77224aaf59e86d1e0c348, type: 3}
+  Right: {fileID: 21300000, guid: 1b476b4d721ea414ea0eda16fb387d88, type: 3}
+  Top: {fileID: 21300000, guid: 5a97294f0b359ea4db56c7fedfe458af, type: 3}
 --- !u!4 &497177816
 Transform:
   m_ObjectHideFlags: 0
@@ -263,8 +271,9 @@ GameObject:
   - component: {fileID: 2145786446}
   - component: {fileID: 2145786448}
   - component: {fileID: 2145786449}
+  - component: {fileID: 2145786450}
   m_Layer: 0
-  m_Name: B
+  m_Name: Tetromino_Empty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -310,3 +319,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a93cf3b86dc11424f8e7fac9e5d32649, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2145786450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2145786444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c9ae03ff47d42b47b3238a1e0222982, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GridTile: {fileID: 647067549681406439, guid: 9b810cb816c0cb44e94d542332c4495a, type: 3}
+  RedGhost: {fileID: 21300000, guid: 6e3f4e15a6302744bbca6a342a6fc281, type: 3}
+  OrangeGhost: {fileID: 21300000, guid: 9041179aa02fb2d498780b08a69569e7, type: 3}
+  YellowGhost: {fileID: 21300000, guid: 2526976d58eff8b4f9f345a851f6aa7e, type: 3}
+  GreenGhost: {fileID: 21300000, guid: 46337d35b6331f249965ef697fbdcc19, type: 3}
+  LblueGhost: {fileID: 21300000, guid: b02668530712c5c43add42e109a2c1db, type: 3}
+  DblueGhost: {fileID: 21300000, guid: 26b0b1b611d6a8b43b5efbacad7dd3f1, type: 3}
+  PurpleGhost: {fileID: 21300000, guid: d2ca197e47d0bf44f889cc02f1fab912, type: 3}

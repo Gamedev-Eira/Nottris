@@ -9,6 +9,15 @@ public class Display_Tetris_Board : MonoBehaviour {
     //2D array stores pointers to game objects
     private GameObject[,] TETRIS_BOARD = new GameObject[16, 10];
 
+    public Sprite TopLeft;
+    public Sprite TopRight;
+    public Sprite BottomLeft;
+    public Sprite BottomRight;
+    public Sprite Bottom;
+    public Sprite Left;
+    public Sprite Right;
+    public Sprite Top;
+
     //Starting position of the first tile on the board
     private float y = -3.5f;
     private float x = -2;
@@ -26,7 +35,7 @@ public class Display_Tetris_Board : MonoBehaviour {
             for (int collum = 0; collum < TETRIS_BOARD.GetLength(1); collum++) {
 
                 TETRIS_BOARD[row, collum] = Instantiate(GridTile, new Vector3(x, y, 0), Quaternion.identity);
-                x = x + (TETRIS_BOARD[row, collum].GetComponent<SpriteRenderer>().bounds.size.x); 
+                x = x + (TETRIS_BOARD[row, collum].GetComponent<SpriteRenderer>().bounds.size.x);
 
             } //end for
 
@@ -34,6 +43,25 @@ public class Display_Tetris_Board : MonoBehaviour {
             x = x - ((TETRIS_BOARD[row, 0].GetComponent<SpriteRenderer>().bounds.size.x) * TETRIS_BOARD.GetLength(0));
 
         }//end for
+
+        //Updates edge of playfield
+        for (int collum = 1; collum < TETRIS_BOARD.GetLength(1)-1; collum++) {
+
+            TETRIS_BOARD[0, collum].GetComponent<GridBlockRenderer>().RenderCustomSprite(Bottom);
+            TETRIS_BOARD[(TETRIS_BOARD.GetLength(0) - 1), collum].GetComponent<GridBlockRenderer>().RenderCustomSprite(Top);
+
+        } for (int row = 1; row < TETRIS_BOARD.GetLength(0)-1; row++) {
+
+            TETRIS_BOARD[row, 0].GetComponent<GridBlockRenderer>().RenderCustomSprite(Left);
+            TETRIS_BOARD[row, (TETRIS_BOARD.GetLength(1) - 1)].GetComponent<GridBlockRenderer>().RenderCustomSprite(Right);
+
+        } //end for
+
+        TETRIS_BOARD[0, 0].GetComponent<GridBlockRenderer>().RenderCustomSprite(BottomLeft);
+        TETRIS_BOARD[0, (TETRIS_BOARD.GetLength(1) - 1) ].GetComponent<GridBlockRenderer>().RenderCustomSprite(BottomRight);
+        TETRIS_BOARD[(TETRIS_BOARD.GetLength(0) -1), 0 ].GetComponent<GridBlockRenderer>().RenderCustomSprite(TopLeft);
+        TETRIS_BOARD[(TETRIS_BOARD.GetLength(0) - 1), TETRIS_BOARD.GetLength(1) - 1].GetComponent<GridBlockRenderer>().RenderCustomSprite(TopRight);
+
     }
 
     void Update() {
@@ -72,7 +100,7 @@ public class Display_Tetris_Board : MonoBehaviour {
                 row--;
             }
         }//end for
-    }
+    }//end for
 
     //Public Functions
 

@@ -19,39 +19,29 @@ public class GridBlockRenderer : MonoBehaviour {
     public Sprite DblueSprite;
     public Sprite PurpleSprite;
     public Sprite GraySprite;
-    public Sprite EmptySprite;
 
     private Vector2 BlockSize;
 
-    // Start is called before the first frame update
-    void Start() {
-        //FUCK YOU SPRITE RENDERER
+    void Awake() {
         Sprite_Renderer = gameObject.GetComponent<SpriteRenderer>();
-
-        //Initalises tile to an empty value
-        RenderTile(EmptySprite);
+        UpdateStatus("Empty");
     }
 
     private void RenderTile(Sprite sprite) {
         Sprite_Renderer.sprite = sprite; //renders the GameObject with the sprite passed to it.
-    }
+    }//end void
 
     public void UpdateStatus(string NewStatus) {
         //Gets it's new status and makes TileStatus equal to it
         TileStatus = NewStatus;
 
-        if(TileStatus == "True Empty")
-        {
+        if(TileStatus == "Empty" || TileStatus == "True Empty") {
             Sprite_Renderer.enabled = false;
-        }
-        else {
+        } else {
             Sprite_Renderer.enabled = true;
 
             //then uses this switch to update it's appearence
             switch (TileStatus) {
-                case "Empty":
-                    RenderTile(EmptySprite); //RenderTile is called, and the new sprite for the GridTile is passed to it
-                    break;
                 case "Red":
                     RenderTile(RedSprite);
                     break;
@@ -77,7 +67,7 @@ public class GridBlockRenderer : MonoBehaviour {
                     RenderTile(GraySprite);
                     break;
                 default:
-                    RenderTile(EmptySprite);
+                    Debug.Log("Oops!");
                     break;
             }
         }
@@ -85,6 +75,11 @@ public class GridBlockRenderer : MonoBehaviour {
 
     public string ReportStatus() {  //literally just returns it's status. EZ.
         return TileStatus;
+    }
+
+    public void RenderCustomSprite(Sprite ImportedSprite) {
+        Sprite_Renderer.enabled = true;
+        RenderTile(ImportedSprite);
     }
 
 }

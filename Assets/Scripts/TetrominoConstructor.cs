@@ -7,7 +7,7 @@ public class TetrominoConstructor : MonoBehaviour {
     private const int Shape_Size = 4;   //Shape size stores the size of the tetromino grid
     private const int ShapeQuantity = 4;    //Shape quantity stores how many rotations a tetromino can do
 
-    private char CurrentShape = 'I' ;   //CurrentShape stores the current tetromino that needs to be rendered
+    private char CurrentShape = 'T' ;   //CurrentShape stores the current tetromino that needs to be rendered
 
     //////////////////////////////////////////////////////////////////////
 
@@ -243,8 +243,7 @@ public class TetrominoConstructor : MonoBehaviour {
         string TheColour;
         bool[,,] TheShape;
 
-        switch (CurrentShape)
-        {
+        switch (CurrentShape) {
             case 'I':
                 TheColour = "Yellow";
                 TheShape = I_Shape;
