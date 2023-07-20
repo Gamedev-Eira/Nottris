@@ -7,11 +7,11 @@ public class Display_Tetris_Board : MonoBehaviour {
     public GameObject GridTile; //Gets a reference to GridBlockRenderer
 
     //2D array stores pointers to game objects
-    GameObject[,] TETRIS_BOARD = new GameObject[16, 10];
+    private GameObject[,] TETRIS_BOARD = new GameObject[16, 10];
 
     //Starting position of the first tile on the board
-    float y = -3.5f;
-    float x = -2;
+    private float y = -3.5f;
+    private float x = -2;
 
     void Awake() {
 
@@ -36,22 +36,13 @@ public class Display_Tetris_Board : MonoBehaviour {
         }//end for
     }
 
-    void Update()
-    {
-        TETRIS_BOARD[0, 0].GetComponent<GridBlockRenderer>().UpdateStatus("Gray");
-        TETRIS_BOARD[0, 1].GetComponent<GridBlockRenderer>().UpdateStatus("Gray");
+    void Update() {
 
-        for(int x = 0; x < TETRIS_BOARD.GetLength(1); x++) {
-            TETRIS_BOARD[1, x].GetComponent<GridBlockRenderer>().UpdateStatus("Gray");
-            TETRIS_BOARD[2, x].GetComponent<GridBlockRenderer>().UpdateStatus("Gray");
-        }
-
-        TETRIS_BOARD[3, 8].GetComponent<GridBlockRenderer>().UpdateStatus("Gray");
-
-        CheckForLineClears();
     }
 
-    void ShiftLines(int StartingRow) {
+    //Private Functions
+
+    private void ShiftLines(int StartingRow) {
 
         for (int row = StartingRow; row < TETRIS_BOARD.GetLength(0) - 1; row++) {
             for (int collum = 0; collum < TETRIS_BOARD.GetLength(1); collum++) {
@@ -62,7 +53,7 @@ public class Display_Tetris_Board : MonoBehaviour {
         } //end for
     }//end ShiftLines
 
-    void CheckForLineClears() {
+    private void CheckForLineClears() {
 
         for (int row = 0; row < TETRIS_BOARD.GetLength(0); row++) {
 
@@ -83,7 +74,20 @@ public class Display_Tetris_Board : MonoBehaviour {
         }//end for
     }
 
+    //Public Functions
+
     public Vector3 ReturnStartingPosition() {
-        return ( TETRIS_BOARD[TETRIS_BOARD.GetLength(0)-2 , 4].transform.position );
+        return ( TETRIS_BOARD[TETRIS_BOARD.GetLength(0)-3 , 4].transform.position);
+    }
+
+    public float[] ReturnEdges() {
+
+        float LeftBorder = TETRIS_BOARD[0, 0].transform.position[0];
+        float RightBorder = TETRIS_BOARD[0, TETRIS_BOARD.GetLength(1) - 1].transform.position[0];
+        float BottomBorder = TETRIS_BOARD[0, 0].transform.position[1];
+
+        float[] Borders = new float[3] { LeftBorder, RightBorder, BottomBorder };
+
+        return (Borders);
     }
 }
