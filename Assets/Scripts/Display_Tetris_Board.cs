@@ -7,11 +7,11 @@ public class Display_Tetris_Board : MonoBehaviour {
     public GameObject GridTile; //Gets a reference to GridBlockRenderer
 
     //2D array stores pointers to game objects
-    GameObject[,] TETRIS_BOARD = new GameObject[16, 10];
+    private GameObject[,] TETRIS_BOARD = new GameObject[16, 10];
 
     //Starting position of the first tile on the board
-    float y = -3.5f;
-    float x = -2;
+    private float y = -3.5f;
+    private float x = -2;
 
     void Awake() {
 
@@ -34,5 +34,60 @@ public class Display_Tetris_Board : MonoBehaviour {
             x = x - ((TETRIS_BOARD[row, 0].GetComponent<SpriteRenderer>().bounds.size.x) * TETRIS_BOARD.GetLength(0));
 
         }//end for
+    }
+
+    void Update() {
+
+    }
+
+    //Private Functions
+
+    private void ShiftLines(int StartingRow) {
+
+        for (int row = StartingRow; row < TETRIS_BOARD.GetLength(0) - 1; row++) {
+            for (int collum = 0; collum < TETRIS_BOARD.GetLength(1); collum++) {
+
+                TETRIS_BOARD[row, collum].GetComponent<GridBlockRenderer>().UpdateStatus(TETRIS_BOARD[row+1, collum].GetComponent<GridBlockRenderer>().ReportStatus());  ;
+
+            }//end for
+        } //end for
+    }//end ShiftLines
+
+    private void CheckForLineClears() {
+
+        for (int row = 0; row < TETRIS_BOARD.GetLength(0); row++) {
+
+            int OccupiedTiles = 0;
+
+            for (int collum = 0; collum < TETRIS_BOARD.GetLength(1); collum++) {
+
+                if (TETRIS_BOARD[row, collum].GetComponent<GridBlockRenderer>().ReportStatus() != "Empty") {
+                    OccupiedTiles++;
+                }//end if
+
+            } //end for
+
+            if (OccupiedTiles == TETRIS_BOARD.GetLength(1)) {
+                ShiftLines(row);
+                row--;
+            }
+        }//end for
+    }
+
+    //Public Functions
+
+    public Vector3 ReturnStartingPosition() {
+        return ( TETRIS_BOARD[TETRIS_BOARD.GetLength(0)-3 , 4].transform.position);
+    }
+
+    public float[] ReturnEdges() {
+
+        float LeftBorder = TETRIS_BOARD[0, 0].transform.position[0];
+        float RightBorder = TETRIS_BOARD[0, TETRIS_BOARD.GetLength(1) - 1].transform.position[0];
+        float BottomBorder = TETRIS_BOARD[0, 0].transform.position[1];
+
+        float[] Borders = new float[3] { LeftBorder, RightBorder, BottomBorder };
+
+        return (Borders);
     }
 }

@@ -5,7 +5,7 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - GridTile: {fileID: 647067549681406439, guid: 9b810cb816c0cb44e94d542332c4495a, type: 3}
-  executionOrder: 0
+  executionOrder: 200
   icon: {instanceID: 0}
   userData: 
   assetBundleName: 
