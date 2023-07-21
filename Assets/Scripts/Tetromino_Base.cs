@@ -9,7 +9,7 @@ public class Tetromino_Base : MonoBehaviour {
     private float PositionX = 0;    //The X and Y positions ther GridTiles are spawned from 
     private float PositionY = 0;
 
-    private int RotationValue = 1;  //The current rotation of the Tetromino
+    private int RotationValue = 2;  //The current rotation of the Tetromino
 
     private const int Dimensions = 4;   //The dimensions of the Tetromino grid
     private const int ShapeQuantity = 4;//The amoung of rotations a Tetromino can do
@@ -222,7 +222,14 @@ public class Tetromino_Base : MonoBehaviour {
         if (Input.GetKeyDown("a") && CheckSidewaysMovement(true) ) { UpdatePositionSideways(true); TetUpdate = true; }
         else if (Input.GetKeyDown("d") && CheckSidewaysMovement(false)) { UpdatePositionSideways(false); TetUpdate = true; }
 
-        if(TetUpdate) { GetComponent<Tetromino_Ghost>().RenderGhost(Tet_Shape, Colour, new Vector3(0.0f, 0.0f, 0.0f), (RotationValue-1) ); TetUpdate = false; };
+        if(TetUpdate) {
+
+            float GhostY = GameObject.Find("Tetris_Board_Empty").GetComponent<Display_Tetris_Board>().FindGhostPosition(Tet_Shape, (Tetromino[0, 0].transform.position[0]), RotationValue);
+            Vector3 GhostPosition = new Vector3(Tetromino[0,0].transform.position.x, GhostY, 0.0f);
+            
+            GetComponent<Tetromino_Ghost>().RenderGhost(Tet_Shape, Colour, GhostPosition, (RotationValue-1) );
+            TetUpdate = false;
+        };
 
     } //end update
 

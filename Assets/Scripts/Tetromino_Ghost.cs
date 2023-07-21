@@ -16,7 +16,7 @@ public class Tetromino_Ghost : MonoBehaviour {
 
     private GameObject[,] Ghost = new GameObject[4, 4]; //Array of GameObject (GridTile) pointers
 
-    private bool[,] Tet_Shape;     //A 3D array (4x4) that stores the potential shapes of the current tetromino
+    private bool[,] Tet_Shape;     //A @D array (4x4) that stores the shape of the current tetromino
 
     private float[] Boundaries;     //stores the left, right, and bottom boundaries of the playfield (in that order)
 
@@ -98,10 +98,8 @@ public class Tetromino_Ghost : MonoBehaviour {
 
                 if (shape[rotate, row, collum] == true) {
                     Ghost[row, collum].GetComponent<GridBlockRenderer>().RenderCustomSprite(sprite);
-                    Debug.Log("True");
                 } else {
                     Ghost[row, collum].GetComponent<GridBlockRenderer>().UpdateStatus("Empty");
-                    Debug.Log("False");
                 }
 
                 Ghost[row, collum].transform.position = position;
@@ -112,6 +110,9 @@ public class Tetromino_Ghost : MonoBehaviour {
             position[0] -= Ghost[0, 0].GetComponent<SpriteRenderer>().bounds.size.x * Ghost.GetLength(0);
 
         }//end for
+
+        
+
     }//end void
 
     }//end class
