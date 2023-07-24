@@ -122,21 +122,23 @@ public class Display_Tetris_Board : MonoBehaviour {
         return (Borders);
     }
 
-    public float FindGhostPosition(bool[,,] shape, float startX, int rotate) {
+    public float FindGhostPosition(bool[,,] shape, float startX, int rotate, int FirstValidColumn, int LastValidColumn) {
 
         float TetWidth = TETRIS_BOARD[0, 0].GetComponent<SpriteRenderer>().bounds.size.x;
 
         int StartingColumn = 0;
-        float temp = TETRIS_BOARD[0, 0].transform.position[0];
+        int temp = 0;
 
-        while (temp < startX) {
-            StartingColumn++;
-            temp += TetWidth;
-        }//end while
+        for(int column = 0; column < TETRIS_BOARD.GetLength(1); column++) {
+            if (TETRIS_BOARD[0, column].transform.position.x == startX) {
+                StartingColumn = column;
+            }//end if
+        }//end for
+
+        Debug.Log("Starting Column: " + StartingColumn);
 
         //int EndingColumn = StartingColumn + 4;
-        int CurrentColumn = StartingColumn;
-
+        //int CurrentColumn = StartingColumn;
 
         int StartingRow = 0;
 
@@ -145,9 +147,10 @@ public class Display_Tetris_Board : MonoBehaviour {
 
         int TetFits = 0;
         
-        bool TetrominoStartFound = false;
+        bool TetrominoStartFound;
         bool GhostPositionFound = false;
 
+        TetrominoStartFound = false;
         for (int row = 0; row < shape.GetLength(0); row++) {
 
             int EmptyColumn = 0;
@@ -165,30 +168,28 @@ public class Display_Tetris_Board : MonoBehaviour {
 
         }//end for
 
-        while (!GhostPositionFound) {
+        Debug.Log("First Column: " + FirstValidColumn + " | First Row: " + FirstValidRow );
 
+        while (!GhostPositionFound) {
+        
             TetFits = 0;
 
-            for (int row = FirstValidRow; row < shape.GetLength(0); row++) {
+            for(int column = FirstValidColumn; column <= LastValidColumn; column++) {
+                for (int row = FirstValidRow; row < 4; row++) {
+                    
+                    bool BoardTileEmpty = (TETRIS_BOARD[StartingRow + (row - FirstValidRow), StartingColumn + (column - FirstValidColumn)].GetComponent<GridBlockRenderer>().ReportStatus() == "Empty") ;
+                    bool GhostTileOccupied = (shape[rotate-1, row, column] == true) ;
 
-                for (int column = 0; column < 4; column++) {
-
-                    if ((StartingColumn+column) >= 0 && shape[rotate-1, row, column] == true && TETRIS_BOARD[StartingRow + (row - FirstValidRow), (StartingColumn+column)].GetComponent<GridBlockRenderer>().ReportStatus() == "Empty") {
-                        TetFits++;
-                    } //end if
-
+                    if (BoardTileEmpty && GhostTileOccupied) { TetFits++; }
                 }//end for
             }//end for
 
-            Debug.Log(TetFits) ;
+            Debug.Log("Tet Fits: " + TetFits);
 
-            if (TetFits < 4) { StartingRow++; }
-            else if (TetFits == 4) { GhostPositionFound = true; }
+            if (TetFits == 4) { GhostPositionFound = true; }
+            else { StartingRow++; }
 
-            if(StartingRow == TETRIS_BOARD.GetLength(0)-1 ) {
-                GhostPositionFound = true;
-                Debug.Log("Forced exit!");
-            }
+            if(StartingRow == 15) { GhostPositionFound = true; }
 
         }//end while
 

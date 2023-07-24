@@ -9,7 +9,7 @@ public class Tetromino_Base : MonoBehaviour {
     private float PositionX = 0;    //The X and Y positions ther GridTiles are spawned from 
     private float PositionY = 0;
 
-    private int RotationValue = 2;  //The current rotation of the Tetromino
+    private int RotationValue = 1;  //The current rotation of the Tetromino
 
     private const int Dimensions = 4;   //The dimensions of the Tetromino grid
     private const int ShapeQuantity = 4;//The amoung of rotations a Tetromino can do
@@ -224,7 +224,28 @@ public class Tetromino_Base : MonoBehaviour {
 
         if(TetUpdate) {
 
-            float GhostY = GameObject.Find("Tetris_Board_Empty").GetComponent<Display_Tetris_Board>().FindGhostPosition(Tet_Shape, (Tetromino[0, 0].transform.position[0]), RotationValue);
+            int FirstColumn = 0;
+            int LastColumn = 0;
+            int check;
+
+            bool FirstColumnFound = false;
+            for(int column = 0; column < Tetromino.GetLength(1); column++ ) {
+                check = 0;
+                for (int row = 0; row < Tetromino.GetLength(0); row++) {
+                    if (Tet_Shape[RotationValue - 1, row, column] == false) { check++; }
+                }//end for
+
+                Debug.Log("#" + column + ") Check is: " + check);
+                if (check >= 4 && !FirstColumnFound) { FirstColumn++; }
+                else if (check < 4) {
+                    LastColumn = column;
+                    if (FirstColumn >= 0) { FirstColumnFound = true; }
+                }//end if
+            }//end for
+
+            Debug.Log("First Column: " + FirstColumn);
+
+            float GhostY = GameObject.Find("Tetris_Board_Empty").GetComponent<Display_Tetris_Board>().FindGhostPosition(Tet_Shape, (Tetromino[0, FirstColumn].transform.position.x), RotationValue, FirstColumn, LastColumn);
             Vector3 GhostPosition = new Vector3(Tetromino[0,0].transform.position.x, GhostY, 0.0f);
             
             GetComponent<Tetromino_Ghost>().RenderGhost(Tet_Shape, Colour, GhostPosition, (RotationValue-1) );
@@ -233,5 +254,5 @@ public class Tetromino_Base : MonoBehaviour {
 
     } //end update
 
-    }//end class
+}//end class
 
