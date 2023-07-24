@@ -105,4 +105,11 @@ MonoBehaviour:
   DblueSprite: {fileID: 21300000, guid: 6f32c6715f9ec144c8d63f5ce209198b, type: 3}
   PurpleSprite: {fileID: 21300000, guid: 78e5f501770cecc47bd683fb0fa2afb0, type: 3}
   GraySprite: {fileID: 21300000, guid: 85c614ee09cd5e14785445a7c4f96524, type: 3}
+  RedGhost: {fileID: 21300000, guid: 6e3f4e15a6302744bbca6a342a6fc281, type: 3}
+  OrangeGhost: {fileID: 21300000, guid: 9041179aa02fb2d498780b08a69569e7, type: 3}
+  YellowGhost: {fileID: 21300000, guid: 2526976d58eff8b4f9f345a851f6aa7e, type: 3}
+  GreenGhost: {fileID: 21300000, guid: 46337d35b6331f249965ef697fbdcc19, type: 3}
+  LblueGhost: {fileID: 21300000, guid: b02668530712c5c43add42e109a2c1db, type: 3}
+  DblueGhost: {fileID: 21300000, guid: 26b0b1b611d6a8b43b5efbacad7dd3f1, type: 3}
+  PurpleGhost: {fileID: 21300000, guid: d2ca197e47d0bf44f889cc02f1fab912, type: 3}
   EmptySprite: {fileID: 21300000, guid: 77bb4b811fd23904ab543b0e0ee2b089, type: 3}
