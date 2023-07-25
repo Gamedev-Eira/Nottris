@@ -18,6 +18,8 @@ public class Display_Tetris_Board : MonoBehaviour {
     public Sprite Right;
     public Sprite Top;
 
+    private int CurrentGhostY = 0;
+
     //Starting position of the first tile on the board
     private float y = -3.5f;
     private float x = -2;
@@ -105,6 +107,17 @@ public class Display_Tetris_Board : MonoBehaviour {
         }//end for
     }//end for
 
+    private int FindStartingColumn(float x) {
+        for (int column = 0; column < TETRIS_BOARD.GetLength(1); column++){
+            if (TETRIS_BOARD[0, column].transform.position.x == x) {
+                return column;
+            }//end if
+        }//end for
+
+        return 0;
+
+    }//end func
+
     //Public Functions
 
     public Vector3 ReturnStartingPosition() {
@@ -129,13 +142,7 @@ public class Display_Tetris_Board : MonoBehaviour {
         int StartingColumn = 0;
         int temp = 0;
 
-        for(int column = 0; column < TETRIS_BOARD.GetLength(1); column++) {
-            if (TETRIS_BOARD[0, column].transform.position.x == startX) {
-                StartingColumn = column;
-            }//end if
-        }//end for
-
-        Debug.Log("Starting Column: " + StartingColumn);
+        StartingColumn = FindStartingColumn(startX);
 
         //int EndingColumn = StartingColumn + 4;
         //int CurrentColumn = StartingColumn;
@@ -147,10 +154,9 @@ public class Display_Tetris_Board : MonoBehaviour {
 
         int TetFits = 0;
         
-        bool TetrominoStartFound;
         bool GhostPositionFound = false;
 
-        TetrominoStartFound = false;
+        bool TetrominoStartFound = false;
         for (int row = 0; row < shape.GetLength(0); row++) {
 
             int EmptyColumn = 0;
@@ -168,7 +174,7 @@ public class Display_Tetris_Board : MonoBehaviour {
 
         }//end for
 
-        Debug.Log("First Column: " + FirstValidColumn + " | First Row: " + FirstValidRow );
+        GameObject.Find("Tetromino_Empty").GetComponent<Tetromino_Ghost>().GetStartPoint(FirstValidRow, FirstValidColumn);
 
         while (!GhostPositionFound) {
         
@@ -184,8 +190,6 @@ public class Display_Tetris_Board : MonoBehaviour {
                 }//end for
             }//end for
 
-            Debug.Log("Tet Fits: " + TetFits);
-
             if (TetFits == 4) { GhostPositionFound = true; }
             else { StartingRow++; }
 
@@ -195,8 +199,47 @@ public class Display_Tetris_Board : MonoBehaviour {
 
         float ReturnY = TETRIS_BOARD[StartingRow, StartingColumn].transform.position[1];
         if (EmptyRows > 0) { ReturnY -= (TetWidth * EmptyRows); }
+
+        CurrentGhostY = StartingRow;
+
         return ReturnY;
 
+    }//end func
+
+    public void PlaceToBoard(int FirstValidRow, int FirstValidColumn, bool[,,] Tet_Shape, int rotate, string Colour, float Position) {
+
+        int StartingColumn = FindStartingColumn(Position);
+        int StartingRow = CurrentGhostY;
+
+        bool TetrominoStartFound = false;
+        int EmptyColumn = 0;
+
+        for (int row = 0; row < Tet_Shape.GetLength(0); row++) {
+            for (int column = 0; column < Tet_Shape.GetLength(1); column++) {
+                if (Tet_Shape[rotate-1, row, column] == false) { EmptyColumn++; }
+            }//end for
+
+            if (EmptyColumn < 4 && !TetrominoStartFound) {
+                TetrominoStartFound = true;
+                FirstValidRow = row;
+            }//end if
+        }//end for
+
+        for (int row = FirstValidRow; row < Tet_Shape.GetLength(0); row++) {
+            
+            for (int column = FirstValidColumn; column < Tet_Shape.GetLength(1); column++) {
+
+                if (Tet_Shape[rotate-1, row, column] == true) {
+
+                    TETRIS_BOARD[StartingRow + (row - FirstValidRow), StartingColumn + (column - FirstValidColumn)].GetComponent<GridBlockRenderer>().UpdateStatus(Colour);
+                }
+            }//end for
+        }//end for
+
+        GameObject.Find("Tetromino_Empty").GetComponent<TetrominoConstructor>().MakeNewTet();
+
+        CheckForLineClears();
 
     }//end func
-}
+
+}//end class

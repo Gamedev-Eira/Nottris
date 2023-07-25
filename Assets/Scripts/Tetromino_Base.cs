@@ -14,7 +14,7 @@ public class Tetromino_Base : MonoBehaviour {
     private const int Dimensions = 4;   //The dimensions of the Tetromino grid
     private const int ShapeQuantity = 4;//The amoung of rotations a Tetromino can do
 
-    private string Colour = "Empty";    //Colour tracks the colour of the tetromino currently being rendered
+    string Colour = "Empty";    //Colour tracks the colour of the tetromino currently being rendered
 
     private GameObject[,] Tetromino = new GameObject[4, 4]; //Array of GameObject (GridTile) pointers
 
@@ -23,6 +23,7 @@ public class Tetromino_Base : MonoBehaviour {
     private float[] Boundaries;     //stores the left, right, and bottom boundaries of the playfield (in that order)
 
     private bool TetUpdate = true;
+    private bool PlaceNextCall = false;
 
     ///////////////////////////////////////////////////////
 
@@ -55,7 +56,7 @@ public class Tetromino_Base : MonoBehaviour {
 
         }//end for
 
-        //InvokeRepeating("UpdatePositionSoftdrop", 0.0f, 1.0f);
+        InvokeRepeating("UpdatePositionSoftdrop", 0.0f, 1.0f);
 
     }//end Awake
 
@@ -67,7 +68,10 @@ public class Tetromino_Base : MonoBehaviour {
         Colour = colour;
         Tet_Shape = shape;
 
+        MoveToTop();
         UpdateRotation();
+
+        TetUpdate = true;
 
     }//end init
 
@@ -115,6 +119,33 @@ public class Tetromino_Base : MonoBehaviour {
         PositionY = temp;
 
     }//end void
+
+    private void MoveToTop() {
+
+        Vector3 Position = GameObject.Find("Tetris_Board_Empty").GetComponent<Display_Tetris_Board>().ReturnStartingPosition();
+        PositionX = Position[0];
+        PositionY = Position[1];
+
+        for (int row = 0; row < Dimensions; row++) {
+            for (int collum = 0; collum < Dimensions; collum++) {
+
+                Tetromino[row, collum].transform.position = new Vector3(PositionX, PositionY, 0.0f);
+
+                //Gets the size of the created GridTile and increments PositionX by it's value
+                //This places the next GridTile next to the previous one
+                PositionX = PositionX + (Tetromino[row, collum].GetComponent<SpriteRenderer>().bounds.size.x);
+
+            } //end for
+
+            //Same deal for Y as with X
+            PositionY = PositionY + (Tetromino[0, 0].GetComponent<SpriteRenderer>().bounds.size.y);
+
+            //X is now reset to it's previous starting value
+            PositionX = PositionX - ((Tetromino[0, 0].GetComponent<SpriteRenderer>().bounds.size.x) * Tetromino.GetLength(0));
+
+        }//end for
+
+    }//end func
 
     ///////////////////////////////////////////////////////
     //Rotation
@@ -211,7 +242,40 @@ public class Tetromino_Base : MonoBehaviour {
             } //end for
         }//end for
 
-    }//end for
+    }//end func
+
+    private void UpdatePositionSoftdrop() {
+
+        if (Tetromino[0, 0].transform.position.y > GetComponent<Tetromino_Ghost>().GetPosition().y) {
+
+            float NewPosition = Tetromino[0, 0].GetComponent<SpriteRenderer>().bounds.size.y;
+
+            for (int row = 0; row < Dimensions; row++) {
+                for (int column = 0; column < Dimensions; column++) {
+
+                    Tetromino[row, column].transform.position -= new Vector3(0, NewPosition, 0);
+
+                }//end for
+            }//end for
+
+        }//end if
+
+        else if (Tetromino[0, 0].transform.position == GetComponent<Tetromino_Ghost>().GetPosition()) { CheckBottom(); }
+
+    }//end func
+
+    ///////////////////////////////////////////////////////
+    //Ect
+
+    void CheckBottom() {
+
+        if(PlaceNextCall == false) { PlaceNextCall = true; }
+        else if(PlaceNextCall == true) {
+            PlaceNextCall = false;
+            GetComponent<Tetromino_Ghost>().InitiatePlacement(Tet_Shape, RotationValue, Colour);
+        }//end if else
+
+    }//end void
 
     void Update() {
         
@@ -235,15 +299,12 @@ public class Tetromino_Base : MonoBehaviour {
                     if (Tet_Shape[RotationValue - 1, row, column] == false) { check++; }
                 }//end for
 
-                Debug.Log("#" + column + ") Check is: " + check);
                 if (check >= 4 && !FirstColumnFound) { FirstColumn++; }
                 else if (check < 4) {
                     LastColumn = column;
                     if (FirstColumn >= 0) { FirstColumnFound = true; }
                 }//end if
             }//end for
-
-            Debug.Log("First Column: " + FirstColumn);
 
             float GhostY = GameObject.Find("Tetris_Board_Empty").GetComponent<Display_Tetris_Board>().FindGhostPosition(Tet_Shape, (Tetromino[0, FirstColumn].transform.position.x), RotationValue, FirstColumn, LastColumn);
             Vector3 GhostPosition = new Vector3(Tetromino[0,0].transform.position.x, GhostY, 0.0f);
@@ -255,4 +316,3 @@ public class Tetromino_Base : MonoBehaviour {
     } //end update
 
 }//end class
-
