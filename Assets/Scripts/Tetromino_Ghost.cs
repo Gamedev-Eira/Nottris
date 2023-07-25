@@ -12,11 +12,7 @@ public class Tetromino_Ghost : MonoBehaviour {
     private const int Dimensions = 4;   //The dimensions of the Tetromino grid
     private const int ShapeQuantity = 4;//The amoung of rotations a Tetromino can do
 
-    private string Colour = "Empty";    //Colour tracks the colour of the tetromino currently being rendered
-
     private GameObject[,] Ghost = new GameObject[4, 4]; //Array of GameObject (GridTile) pointers
-
-    private bool[,] Tet_Shape;     //A @D array (4x4) that stores the shape of the current tetromino
 
     private float[] Boundaries;     //stores the left, right, and bottom boundaries of the playfield (in that order)
 
@@ -27,6 +23,9 @@ public class Tetromino_Ghost : MonoBehaviour {
     public Sprite LblueGhost;
     public Sprite DblueGhost;
     public Sprite PurpleGhost;
+
+    private int FirstValidColumn;
+    private int FirstValidRow;
 
     ///////////////////////////////////////////////////////
 
@@ -57,8 +56,6 @@ public class Tetromino_Ghost : MonoBehaviour {
             PositionX = PositionX - ((Ghost[0, 0].GetComponent<SpriteRenderer>().bounds.size.x) * Ghost.GetLength(0));
 
         }//end for
-
-        //InvokeRepeating("UpdatePositionSoftdrop", 0.0f, 1.0f);
 
     }//end Awake
 
@@ -115,4 +112,25 @@ public class Tetromino_Ghost : MonoBehaviour {
 
     }//end void
 
-    }//end class
+    public void GetStartPoint(int row, int column) {
+        FirstValidRow = row; FirstValidColumn = column;
+    }
+
+    public int ReturnFirstRow() {
+        return FirstValidRow;
+    }
+
+    public int ReturnFirstColumn() {
+        return FirstValidColumn;
+    }
+
+    public Vector3 GetPosition() {
+        return Ghost[0, 0].transform.position;
+    }
+
+    public void InitiatePlacement(bool[,,] shape, int rotate, string colour) {
+        GameObject.Find("Tetris_Board_Empty").GetComponent<Display_Tetris_Board>().PlaceToBoard(FirstValidRow, FirstValidColumn, shape, rotate, colour, Ghost[FirstValidRow, FirstValidColumn].transform.position.x);
+        
+    }
+
+}//end class

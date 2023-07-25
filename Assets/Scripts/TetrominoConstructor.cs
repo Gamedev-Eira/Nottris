@@ -7,7 +7,8 @@ public class TetrominoConstructor : MonoBehaviour {
     private const int Shape_Size = 4;   //Shape size stores the size of the tetromino grid
     private const int ShapeQuantity = 4;    //Shape quantity stores how many rotations a tetromino can do
 
-    private char CurrentShape = 'T' ;   //CurrentShape stores the current tetromino that needs to be rendered
+    private char[] Shapes = new char[7] { 'T', 'I', 'O', 'Z', 'S', 'J', 'L' };
+    private int CurrentShapeAccess = -1;
 
     //////////////////////////////////////////////////////////////////////
 
@@ -236,14 +237,22 @@ public class TetrominoConstructor : MonoBehaviour {
 
     //MakeNewTet passes along the colour and 3D shape array to Tetromino_Base, according to which shape currently needs to be drawn
 
-    void MakeNewTet() {
+    void Awake() {
+        TetRandomiser();
+    }
 
-        //Vector3 StartingPosition = GetComponent<Display_Tetris_Board>().ReturnStartingPosition();
+    public void MakeNewTet() {
 
         string TheColour;
         bool[,,] TheShape;
 
-        switch (CurrentShape) {
+        if (CurrentShapeAccess < 6) { CurrentShapeAccess++; }
+        else if (CurrentShapeAccess == 6) {
+            TetRandomiser();
+            CurrentShapeAccess = 0;
+        }
+
+        switch (Shapes[CurrentShapeAccess]) {
             case 'I':
                 TheColour = "Yellow";
                 TheShape = I_Shape;
@@ -281,6 +290,23 @@ public class TetrominoConstructor : MonoBehaviour {
         GetComponent<Tetromino_Base>().init(TheColour, TheShape);
 
     }
+
+    private void TetRandomiser() {
+
+        for(int i = 0; i < 7; i++) {
+
+            int RandomNum1 = 0;
+            int RandomNum2 = 0;
+
+            while (RandomNum1 == RandomNum2) { RandomNum1 = Random.Range(0, 6); RandomNum2 = Random.Range(0, 6); }
+
+            char temp = Shapes[RandomNum1];
+            Shapes[RandomNum1] = Shapes[RandomNum2];
+            Shapes[RandomNum2] = temp;
+
+        }//end for
+
+    }//end func
 
     //Calls MakeNewTet on starting (for the time being)
     void Start() {
