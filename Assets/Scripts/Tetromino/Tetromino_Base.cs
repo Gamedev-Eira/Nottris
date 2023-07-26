@@ -199,11 +199,11 @@ public class Tetromino_Base : MonoBehaviour {
 
         }//end for
 
-        if (OnScreen == 4) {
-            return (true);
-        } else {
-            return (false);
-        }
+        if(OnScreen < 4) { return false; }
+
+        int StartColumn = GetComponent<Tetromino_Ghost>().ReturnFirstColumn();
+
+        return GameObject.Find("Tetris_Board_Empty").GetComponent<Display_Tetris_Board>().CheckSidewaysTetMovement(Tet_Shape, RotationValue, Tetromino[0, StartColumn].transform.position.x, Tetromino[0, 0].transform.position.y, MovingLeft);
 
     }//end bool
 
@@ -277,16 +277,24 @@ public class Tetromino_Base : MonoBehaviour {
 
     }//end void
 
+    ///////////////////////////////////////////////////////
+    //Main game loop
+
     void Update() {
-        
+
         //If checks for a left or right mouse click and rotates accordingly
         if (Input.GetMouseButtonDown(0)) { DoRotation(true); TetUpdate = true; }
         else if (Input.GetMouseButtonDown(1)) { DoRotation(false); TetUpdate = true; }
 
-        if (Input.GetKeyDown("a") && CheckSidewaysMovement(true) ) { UpdatePositionSideways(true); TetUpdate = true; }
+        else if (Input.GetKeyDown("a") && CheckSidewaysMovement(true)) { UpdatePositionSideways(true); TetUpdate = true; }
         else if (Input.GetKeyDown("d") && CheckSidewaysMovement(false)) { UpdatePositionSideways(false); TetUpdate = true; }
 
-        if(TetUpdate) {
+        else if (Input.GetKeyDown("w")) { GetComponent<Tetromino_Ghost>().InitiatePlacement(Tet_Shape, RotationValue, Colour); }
+        else if (Input.GetKeyDown("s")) { UpdatePositionSoftdrop(); }
+
+        if (TetUpdate) {
+
+            PlaceNextCall = false;
 
             int FirstColumn = 0;
             int LastColumn = 0;
@@ -311,7 +319,7 @@ public class Tetromino_Base : MonoBehaviour {
             
             GetComponent<Tetromino_Ghost>().RenderGhost(Tet_Shape, Colour, GhostPosition, (RotationValue-1) );
             TetUpdate = false;
-        };
+        }
 
     } //end update
 

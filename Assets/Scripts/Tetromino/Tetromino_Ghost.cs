@@ -25,6 +25,7 @@ public class Tetromino_Ghost : MonoBehaviour {
     public Sprite PurpleGhost;
 
     private int FirstValidColumn;
+    private int LastValidColumn;
     private int FirstValidRow;
 
     ///////////////////////////////////////////////////////
@@ -108,20 +109,10 @@ public class Tetromino_Ghost : MonoBehaviour {
 
         }//end for
 
-        
-
     }//end void
 
-    public void GetStartPoint(int row, int column) {
-        FirstValidRow = row; FirstValidColumn = column;
-    }
-
-    public int ReturnFirstRow() {
-        return FirstValidRow;
-    }
-
-    public int ReturnFirstColumn() {
-        return FirstValidColumn;
+    public void GetStartPoint(int row, int column1, int column2) {
+        FirstValidRow = row; FirstValidColumn = column1; LastValidColumn = column2;
     }
 
     public Vector3 GetPosition() {
@@ -131,6 +122,20 @@ public class Tetromino_Ghost : MonoBehaviour {
     public void InitiatePlacement(bool[,,] shape, int rotate, string colour) {
         GameObject.Find("Tetris_Board_Empty").GetComponent<Display_Tetris_Board>().PlaceToBoard(FirstValidRow, FirstValidColumn, shape, rotate, colour, Ghost[FirstValidRow, FirstValidColumn].transform.position.x);
         
+    }
+
+    ///////////////////////////////////////////////////////
+
+    public int ReturnFirstRow() {
+        return FirstValidRow;
+    }
+
+    public int ReturnFirstColumn() {
+        return FirstValidColumn;
+    }
+
+    public int ReturnLastColumn() {
+        return LastValidColumn;
     }
 
 }//end class

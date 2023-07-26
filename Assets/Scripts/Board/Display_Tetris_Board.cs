@@ -46,32 +46,9 @@ public class Display_Tetris_Board : MonoBehaviour {
 
         }//end for
 
-        //Updates edge of playfield
-        for (int collum = 1; collum < TETRIS_BOARD.GetLength(1)-1; collum++) {
+    }//end func
 
-            TETRIS_BOARD[0, collum].GetComponent<GridBlockRenderer>().RenderCustomSprite(Bottom);
-            TETRIS_BOARD[(TETRIS_BOARD.GetLength(0) - 1), collum].GetComponent<GridBlockRenderer>().RenderCustomSprite(Top);
-
-        } for (int row = 1; row < TETRIS_BOARD.GetLength(0)-1; row++) {
-
-            TETRIS_BOARD[row, 0].GetComponent<GridBlockRenderer>().RenderCustomSprite(Left);
-            TETRIS_BOARD[row, (TETRIS_BOARD.GetLength(1) - 1)].GetComponent<GridBlockRenderer>().RenderCustomSprite(Right);
-
-        } //end for
-
-        TETRIS_BOARD[0, 0].GetComponent<GridBlockRenderer>().RenderCustomSprite(BottomLeft);
-        TETRIS_BOARD[0, (TETRIS_BOARD.GetLength(1) - 1) ].GetComponent<GridBlockRenderer>().RenderCustomSprite(BottomRight);
-        TETRIS_BOARD[(TETRIS_BOARD.GetLength(0) -1), 0 ].GetComponent<GridBlockRenderer>().RenderCustomSprite(TopLeft);
-        TETRIS_BOARD[(TETRIS_BOARD.GetLength(0) - 1), TETRIS_BOARD.GetLength(1) - 1].GetComponent<GridBlockRenderer>().RenderCustomSprite(TopRight);
-
-    }
-
-    void Update() {
-        TETRIS_BOARD[0, 1].GetComponent<GridBlockRenderer>().UpdateStatus("Red");
-        TETRIS_BOARD[0, 3].GetComponent<GridBlockRenderer>().UpdateStatus("Red");
-
-        TETRIS_BOARD[0, 8].GetComponent<GridBlockRenderer>().UpdateStatus("Red");
-    }
+    void Start() { UpdateEdgeTiles(); }
 
     //Private Functions
 
@@ -84,6 +61,9 @@ public class Display_Tetris_Board : MonoBehaviour {
 
             }//end for
         } //end for
+
+        UpdateEdgeTiles();
+
     }//end ShiftLines
 
     private void CheckForLineClears() {
@@ -118,6 +98,50 @@ public class Display_Tetris_Board : MonoBehaviour {
 
     }//end func
 
+    private int FindStartingRow(float y) {
+        for (int row = 0; row < TETRIS_BOARD.GetLength(0); row++) {
+            if (TETRIS_BOARD[row, 0].transform.position.y == y) {
+                return row;
+            }//end if
+        }//end for
+
+        return 0;
+
+    }//end func
+
+    private void UpdateEdgeTiles() {
+        //Updates edge of playfield
+
+        for (int collum = 1; collum < TETRIS_BOARD.GetLength(1) - 1; collum++) {
+            if (TETRIS_BOARD[0, collum].GetComponent<GridBlockRenderer>().ReportStatus() == "Empty") {
+                TETRIS_BOARD[0, collum].GetComponent<GridBlockRenderer>().RenderCustomSprite(Bottom);
+            } if (TETRIS_BOARD[TETRIS_BOARD.GetLength(0)-1, collum].GetComponent<GridBlockRenderer>().ReportStatus() == "Empty") {
+                TETRIS_BOARD[TETRIS_BOARD.GetLength(0)-1, collum].GetComponent<GridBlockRenderer>().RenderCustomSprite(Top);
+            }//end if
+        }//end for
+        
+        for (int row = 1; row < TETRIS_BOARD.GetLength(0) - 1; row++) {
+            if (TETRIS_BOARD[row, 0].GetComponent<GridBlockRenderer>().ReportStatus() == "Empty") {
+                TETRIS_BOARD[row, 0].GetComponent<GridBlockRenderer>().RenderCustomSprite(Left);
+            } if (TETRIS_BOARD[row, (TETRIS_BOARD.GetLength(1) - 1)].GetComponent<GridBlockRenderer>().ReportStatus() == "Empty") {
+                TETRIS_BOARD[row, (TETRIS_BOARD.GetLength(1) - 1)].GetComponent<GridBlockRenderer>().RenderCustomSprite(Right);
+            }//end if
+        } //end for
+
+        if (TETRIS_BOARD[0, 0].GetComponent<GridBlockRenderer>().ReportStatus() == "Empty") {
+            TETRIS_BOARD[0, 0].GetComponent<GridBlockRenderer>().RenderCustomSprite(BottomLeft);
+        } if (TETRIS_BOARD[0, (TETRIS_BOARD.GetLength(1)-1)].GetComponent<GridBlockRenderer>().ReportStatus() == "Empty") {
+            TETRIS_BOARD[0, (TETRIS_BOARD.GetLength(1)-1)].GetComponent<GridBlockRenderer>().RenderCustomSprite(BottomRight);
+        } if (TETRIS_BOARD[(TETRIS_BOARD.GetLength(0)-1), 0].GetComponent<GridBlockRenderer>().ReportStatus() == "Empty") {
+            TETRIS_BOARD[(TETRIS_BOARD.GetLength(0)-1), 0].GetComponent<GridBlockRenderer>().RenderCustomSprite(TopLeft);
+        } if (TETRIS_BOARD[(TETRIS_BOARD.GetLength(0) - 1), TETRIS_BOARD.GetLength(1) - 1].GetComponent<GridBlockRenderer>().ReportStatus() == "Empty") {
+            TETRIS_BOARD[(TETRIS_BOARD.GetLength(0) - 1), TETRIS_BOARD.GetLength(1) - 1].GetComponent<GridBlockRenderer>().RenderCustomSprite(TopRight);
+        }
+
+        
+        
+    }
+
     //Public Functions
 
     public Vector3 ReturnStartingPosition() {
@@ -143,9 +167,6 @@ public class Display_Tetris_Board : MonoBehaviour {
         int temp = 0;
 
         StartingColumn = FindStartingColumn(startX);
-
-        //int EndingColumn = StartingColumn + 4;
-        //int CurrentColumn = StartingColumn;
 
         int StartingRow = 0;
 
@@ -174,7 +195,7 @@ public class Display_Tetris_Board : MonoBehaviour {
 
         }//end for
 
-        GameObject.Find("Tetromino_Empty").GetComponent<Tetromino_Ghost>().GetStartPoint(FirstValidRow, FirstValidColumn);
+        GameObject.Find("Tetromino_Empty").GetComponent<Tetromino_Ghost>().GetStartPoint(FirstValidRow, FirstValidColumn, LastValidColumn);
 
         while (!GhostPositionFound) {
         
@@ -183,7 +204,10 @@ public class Display_Tetris_Board : MonoBehaviour {
             for(int column = FirstValidColumn; column <= LastValidColumn; column++) {
                 for (int row = FirstValidRow; row < 4; row++) {
                     
-                    bool BoardTileEmpty = (TETRIS_BOARD[StartingRow + (row - FirstValidRow), StartingColumn + (column - FirstValidColumn)].GetComponent<GridBlockRenderer>().ReportStatus() == "Empty") ;
+                    bool BoardTileEmpty;
+                    if(StartingRow + (row - FirstValidRow) > TETRIS_BOARD.GetLength(0)-1 ) { BoardTileEmpty = true; }
+                    else { BoardTileEmpty = (TETRIS_BOARD[StartingRow + (row - FirstValidRow), StartingColumn + (column - FirstValidColumn)].GetComponent<GridBlockRenderer>().ReportStatus() == "Empty"); }
+
                     bool GhostTileOccupied = (shape[rotate-1, row, column] == true) ;
 
                     if (BoardTileEmpty && GhostTileOccupied) { TetFits++; }
@@ -241,5 +265,72 @@ public class Display_Tetris_Board : MonoBehaviour {
         CheckForLineClears();
 
     }//end func
+
+    public bool CheckSidewaysTetMovement(bool[,,] shape, int rotate, float posX, float posY, bool MovingLeft) {
+
+        int FirstValidRow = GameObject.Find("Tetromino_Empty").GetComponent<Tetromino_Ghost>().ReturnFirstRow();
+        int FirstValidColumn = GameObject.Find("Tetromino_Empty").GetComponent<Tetromino_Ghost>().ReturnFirstColumn();
+        int LastValidColumn = GameObject.Find("Tetromino_Empty").GetComponent<Tetromino_Ghost>().ReturnLastColumn();
+
+        int StartingColumn = FindStartingColumn(posX);
+        int StartingRow = FindStartingRow(posY);
+
+        Debug.Log(StartingRow);
+
+        if (MovingLeft) { StartingColumn--; }
+        else if (!MovingLeft) { StartingColumn++; }
+
+        int TetFits = 0;
+
+        for (int row = FirstValidRow; row < shape.GetLength(0); row++ ) {
+            for (int column = FirstValidColumn; column <= LastValidColumn; column++) {
+                int a = StartingRow + (row - FirstValidRow);
+                Debug.Log("Row: " + a);
+
+                bool TetOccupied = (shape[rotate - 1, row, column] == true);
+                bool BoardEmpty;
+                if (StartingRow + (row - FirstValidRow) > TETRIS_BOARD.GetLength(0) - 1) { BoardEmpty = true; }
+                else { BoardEmpty = (TETRIS_BOARD[StartingRow + (row - FirstValidRow), StartingColumn + (column - FirstValidColumn)].GetComponent<GridBlockRenderer>().ReportStatus() == "Empty"); }
+
+                Debug.Log(TetOccupied && BoardEmpty);
+
+                if ( TetOccupied && BoardEmpty) { TetFits++; }
+            }//end for
+        }//end for
+
+        
+
+        if(TetFits < 4) { return false; }
+        else { return true; }
+
+    }//end func
+
+    //Draw Background
+
+    public int ReturnBoardHeight() {
+        int Height = TETRIS_BOARD.GetLength(0);
+        return Height;
+    }
+
+    public int ReturnBoardLength() {
+        int Length = TETRIS_BOARD.GetLength(1);
+        return Length;
+    }
+
+    public Vector3 ReturnBoardStart() {
+
+        Vector3 Midpoint = new Vector3(0.0f, 0.0f, 0.0f);
+        
+        if(TETRIS_BOARD.GetLength(0) % 2 == 0 && TETRIS_BOARD.GetLength(1) % 2 == 0) {
+            Midpoint = TETRIS_BOARD[ ((TETRIS_BOARD.GetLength(0)/2) -1 ) , ((TETRIS_BOARD.GetLength(1) / 2) -1 ) ].transform.position;
+        }//end if
+
+        return Midpoint;
+
+    }//end func
+
+    public float ReturnGridScale() {
+        return (TETRIS_BOARD[0, 0].transform.localScale.x);
+    }
 
 }//end class
