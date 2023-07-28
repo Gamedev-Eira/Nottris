@@ -56,7 +56,7 @@ public class Tetromino_Base : MonoBehaviour {
 
         }//end for
 
-        InvokeRepeating("UpdatePositionSoftdrop", 0.0f, 1.0f);
+        InvokeRepeating("UpdatePositionSoftdrop", 0.0f, 0.5f);
 
     }//end Awake
 
@@ -70,8 +70,17 @@ public class Tetromino_Base : MonoBehaviour {
 
         MoveToTop();
         UpdateRotation();
-
+        RefreshGhost();
         TetUpdate = true;
+
+        int StartColumn = GetComponent<Tetromino_Ghost>().ReturnFirstColumn();
+        bool TetFits = GameObject.Find("Tetris_Board_Empty").GetComponent<Display_Tetris_Board>().CheckStartPosition(Tet_Shape, RotationValue, Tetromino[0, StartColumn].transform.position.x, Tetromino[0, 0].transform.position.y);
+        
+        if (!TetFits) {
+
+            GameObject.Find("SceneLoader_Empty").GetComponent<SceneLoader>().LoadScene("GameoverScreen");
+            
+        }
 
     }//end init
 
@@ -99,24 +108,16 @@ public class Tetromino_Base : MonoBehaviour {
 
     private void ResetToEmpty() {
 
-        float temp = PositionY;
-
         //for loop sets all the GridTiles in Tetromino to empty
 
         for (int row = 0; row < Tetromino.GetLength(0); row++) {
             for (int collum = 0; collum < Tetromino.GetLength(1); collum++) {
 
                 Tetromino[row, collum].GetComponent<GridBlockRenderer>().UpdateStatus("Empty");
-                PositionX = PositionX + (Tetromino[row, collum].GetComponent<SpriteRenderer>().bounds.size.x);
 
             } //end for
 
-            PositionY = PositionY + (Tetromino[row, 0].GetComponent<SpriteRenderer>().bounds.size.y);
-            PositionX = PositionX - ((Tetromino[row, 0].GetComponent<SpriteRenderer>().bounds.size.x) * Tetromino.GetLength(0));
-
         }//end for
-
-        PositionY = temp;
 
     }//end void
 
@@ -277,11 +278,37 @@ public class Tetromino_Base : MonoBehaviour {
 
     }//end void
 
+    void RefreshGhost() {
+        PlaceNextCall = false;
+
+        int FirstColumn = 0;
+        int LastColumn = 0;
+        int check;
+
+        bool FirstColumnFound = false;
+        for (int column = 0; column < Tetromino.GetLength(1); column++) {
+            check = 0;
+            for (int row = 0; row < Tetromino.GetLength(0); row++) {
+                if (Tet_Shape[RotationValue - 1, row, column] == false) { check++; }
+            }//end for
+
+            if (check >= 4 && !FirstColumnFound) { FirstColumn++; }
+            else if (check < 4) {
+                LastColumn = column;
+                if (FirstColumn >= 0) { FirstColumnFound = true; }
+            }//end if
+        }//end for
+
+        float GhostY = GameObject.Find("Tetris_Board_Empty").GetComponent<Display_Tetris_Board>().FindGhostPosition(Tet_Shape, (Tetromino[0, FirstColumn].transform.position.x), RotationValue, FirstColumn, LastColumn);
+        Vector3 GhostPosition = new Vector3(Tetromino[0, 0].transform.position.x, GhostY, 0.0f);
+
+        GetComponent<Tetromino_Ghost>().RenderGhost(Tet_Shape, Colour, GhostPosition, (RotationValue - 1));
+    }
+
     ///////////////////////////////////////////////////////
     //Main game loop
 
     void Update() {
-
         //If checks for a left or right mouse click and rotates accordingly
         if (Input.GetMouseButtonDown(0)) { DoRotation(true); TetUpdate = true; }
         else if (Input.GetMouseButtonDown(1)) { DoRotation(false); TetUpdate = true; }
@@ -294,30 +321,7 @@ public class Tetromino_Base : MonoBehaviour {
 
         if (TetUpdate) {
 
-            PlaceNextCall = false;
-
-            int FirstColumn = 0;
-            int LastColumn = 0;
-            int check;
-
-            bool FirstColumnFound = false;
-            for(int column = 0; column < Tetromino.GetLength(1); column++ ) {
-                check = 0;
-                for (int row = 0; row < Tetromino.GetLength(0); row++) {
-                    if (Tet_Shape[RotationValue - 1, row, column] == false) { check++; }
-                }//end for
-
-                if (check >= 4 && !FirstColumnFound) { FirstColumn++; }
-                else if (check < 4) {
-                    LastColumn = column;
-                    if (FirstColumn >= 0) { FirstColumnFound = true; }
-                }//end if
-            }//end for
-
-            float GhostY = GameObject.Find("Tetris_Board_Empty").GetComponent<Display_Tetris_Board>().FindGhostPosition(Tet_Shape, (Tetromino[0, FirstColumn].transform.position.x), RotationValue, FirstColumn, LastColumn);
-            Vector3 GhostPosition = new Vector3(Tetromino[0,0].transform.position.x, GhostY, 0.0f);
-            
-            GetComponent<Tetromino_Ghost>().RenderGhost(Tet_Shape, Colour, GhostPosition, (RotationValue-1) );
+            RefreshGhost();
             TetUpdate = false;
         }
 

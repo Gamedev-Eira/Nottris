@@ -124,6 +124,17 @@ public class Tetromino_Ghost : MonoBehaviour {
         
     }
 
+    public void ResetToEmpty() {
+
+        for (int row = 0; row < Ghost.GetLength(0); row++) {
+            for (int collum = 0; collum < Ghost.GetLength(1); collum++) {
+
+                Ghost[row, collum].GetComponent<GridBlockRenderer>().UpdateStatus("Empty");
+
+            } //end for
+        }//end for
+    }//end void
+
     ///////////////////////////////////////////////////////
 
     public int ReturnFirstRow() {
