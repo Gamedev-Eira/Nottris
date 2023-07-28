@@ -298,9 +298,41 @@ public class Display_Tetris_Board : MonoBehaviour {
             }//end for
         }//end for
 
-        
-
         if(TetFits < 4) { return false; }
+        else { return true; }
+
+    }//end func
+
+    public bool CheckStartPosition(bool[,,] shape, int rotate, float posX, float posY) {
+
+        int FirstValidRow = GameObject.Find("Tetromino_Empty").GetComponent<Tetromino_Ghost>().ReturnFirstRow();
+        int FirstValidColumn = GameObject.Find("Tetromino_Empty").GetComponent<Tetromino_Ghost>().ReturnFirstColumn();
+        int LastValidColumn = GameObject.Find("Tetromino_Empty").GetComponent<Tetromino_Ghost>().ReturnLastColumn();
+
+        int StartingColumn = FindStartingColumn(posX);
+        int StartingRow = FindStartingRow(posY);
+
+        int TetFits = 0;
+
+        for (int row = FirstValidRow; row < shape.GetLength(0); row++)
+        {
+            for (int column = FirstValidColumn; column <= LastValidColumn; column++)
+            {
+                int a = StartingRow + (row - FirstValidRow);
+                Debug.Log("Row: " + a);
+
+                bool TetOccupied = (shape[rotate - 1, row, column] == true);
+                bool BoardEmpty;
+                if (StartingRow + (row - FirstValidRow) > TETRIS_BOARD.GetLength(0) - 1) { BoardEmpty = true; }
+                else { BoardEmpty = (TETRIS_BOARD[StartingRow + (row - FirstValidRow), StartingColumn + (column - FirstValidColumn)].GetComponent<GridBlockRenderer>().ReportStatus() == "Empty"); }
+
+                Debug.Log(TetOccupied && BoardEmpty);
+
+                if (TetOccupied && BoardEmpty) { TetFits++; }
+            }//end for
+        }//end for
+
+        if (TetFits < 4) { return false; }
         else { return true; }
 
     }//end func

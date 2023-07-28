@@ -8,4 +8,13 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Scenes/TitleScreen.unity
+    guid: 4f0eb61430d5d4148a0724d715a33f16
+  - enabled: 1
+    path: Assets/Scenes/Tetris_Playfield.unity
+    guid: 0d65d36e23746f446818267bed606abe
+  - enabled: 1
+    path: Assets/Scenes/GameoverScreen.unity
+    guid: a929c06ce3b035e45b2471f8728c3d8e
   m_configObjects: {}
